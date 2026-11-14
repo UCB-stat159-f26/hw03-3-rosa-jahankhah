@@ -60,7 +60,11 @@ def _style_age_gap_plot(ax):
 
 
 def plot_age_gap(data):
-    """Scatter plot of age difference versus player age."""
+    """Scatter plot of age difference versus player age.
+
+    Expects a DataFrame from ``get_player_matches``. Wins and losses use
+    distinct colors. Returns a matplotlib Axes for saving or customization.
+    """
     frame = _prepare_plot_frame(_validate_plot_data(data))
     _, ax = plt.subplots(figsize=(10, 6))
     _scatter_result(ax, frame, "W")

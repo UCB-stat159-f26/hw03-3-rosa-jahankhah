@@ -91,7 +91,12 @@ def _matches_dataframe(records):
 
 
 def get_player_matches(player_name):
-    """Return a cleaned career-match DataFrame for a tennis player."""
+    """Return a cleaned career-match DataFrame for a tennis player.
+
+    Accepts flexible name formats such as ``"serena williams"``,
+    ``"Serena Williams"``, or ``"SerenaWilliams"``. The result includes
+    match date, opponent, ages, age difference, and win/loss result.
+    """
     birth_date = _player_birth_date(player_name)
     rows = _parse_match_records(_fetch_career_js(player_name))
     return _matches_dataframe(_clean_match_records(rows, birth_date))
