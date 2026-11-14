@@ -94,3 +94,38 @@ def _male_match_row(row, player_birth_date):
         "age_difference": player_age - opponent_age,
         "result": row[4],
     }
+
+
+def _is_birth_date_field(value):
+    """Return True if value looks like a YYYYMMDD birth date."""
+    text = str(value).strip() if value is not None else ""
+    if not re.fullmatch(r"\d{8}", text):
+        return False
+    try:
+        datetime.strptime(text, "%Y%m%d")
+    except ValueError:
+        return False
+    return True
+
+
+def _clean_match_row(row, player_birth_date):
+    """Clean one match using female or male field layout."""
+    if len(row) < 17 or not row[16]:
+        return None
+    cleaner = (
+        _female_match_row if _is_birth_date_field(row[16]) else _male_match_row
+    )
+    try:
+        return cleaner(row, player_birth_date)
+    except ValueError:
+        return None
+
+
+def _clean_match_records(rows, player_birth_date):
+    """Clean all usable match rows for a player."""
+    records = []
+    for row in rows:
+        match = _clean_match_row(row, player_birth_date)
+        if match is not None:
+            records.append(match)
+    return records

@@ -1,7 +1,22 @@
 import re
 from datetime import datetime
 
+import pandas as pd
 import requests
+
+from tennis_age.parsing import (
+    _clean_match_records,
+    _parse_match_records,
+)
+
+EXPECTED_COLUMNS = [
+    "match_date",
+    "opponent",
+    "player_age",
+    "opponent_age",
+    "age_difference",
+    "result",
+]
 
 
 def _normalize_player_name(name):
@@ -62,3 +77,21 @@ def _parse_birth_date(page_text):
 def _player_birth_date(player_name):
     """Retrieve a player's birth date from Tennis Abstract."""
     return _parse_birth_date(_fetch_player_page(player_name))
+
+
+def _matches_dataframe(records):
+    """Build a cleaned pandas DataFrame from match records."""
+    if not records:
+        raise ValueError("No usable match records found.")
+    frame = pd.DataFrame(records, columns=EXPECTED_COLUMNS)
+    frame = frame.drop_duplicates().reset_index(drop=True)
+    for column in ("player_age", "opponent_age", "age_difference"):
+        frame[column] = pd.to_numeric(frame[column], errors="raise")
+    return frame
+
+
+def get_player_matches(player_name):
+    """Return a cleaned career-match DataFrame for a tennis player."""
+    birth_date = _player_birth_date(player_name)
+    rows = _parse_match_records(_fetch_career_js(player_name))
+    return _matches_dataframe(_clean_match_records(rows, birth_date))
