@@ -1,4 +1,5 @@
 import re
+import time
 from datetime import datetime
 
 import pandas as pd
@@ -17,6 +18,9 @@ EXPECTED_COLUMNS = [
     "age_difference",
     "result",
 ]
+REQUEST_HEADERS = {
+    "User-Agent": "tennis-age-package/0.1 (STAT159 academic use)",
+}
 
 
 def _normalize_player_name(name):
@@ -33,10 +37,21 @@ def _normalize_player_name(name):
     return name[0].upper() + name[1:]
 
 
+def _request_with_retry(url, attempts=3):
+    """GET a URL, retrying briefly on HTTP 429 responses."""
+    response = None
+    for attempt in range(attempts):
+        response = requests.get(url, timeout=15, headers=REQUEST_HEADERS)
+        if response.status_code != 429:
+            return response
+        time.sleep(1.5 * (attempt + 1))
+    return response
+
+
 def _download_text(url, player_name):
     """Download text from Tennis Abstract, with shared error handling."""
     try:
-        response = requests.get(url, timeout=15)
+        response = _request_with_retry(url)
         if response.status_code == 404:
             raise ValueError(f"Player not found: {player_name}")
         response.raise_for_status()
@@ -97,6 +112,6 @@ def get_player_matches(player_name):
     ``"Serena Williams"``, or ``"SerenaWilliams"``. The result includes
     match date, opponent, ages, age difference, and win/loss result.
     """
-    birth_date = _player_birth_date(player_name)
     rows = _parse_match_records(_fetch_career_js(player_name))
+    birth_date = _player_birth_date(player_name)
     return _matches_dataframe(_clean_match_records(rows, birth_date))

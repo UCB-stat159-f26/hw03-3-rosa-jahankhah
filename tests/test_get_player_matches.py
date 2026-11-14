@@ -107,10 +107,10 @@ def test_excludes_missing_and_malformed_rows():
 
 
 @patch(
-    "tennis_age.players._player_birth_date",
+    "tennis_age.players._fetch_career_js",
     side_effect=ValueError("Player not found: GastonSanchez"),
 )
-def test_invalid_player_name(mock_birth):
+def test_invalid_player_name(mock_fetch):
     with pytest.raises(ValueError, match="Player not found"):
         get_player_matches("GastonSanchez")
 

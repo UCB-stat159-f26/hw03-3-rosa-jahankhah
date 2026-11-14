@@ -17,6 +17,9 @@ def test_fetch_serena(mock_get):
     mock_get.assert_called_once_with(
         "https://www.tennisabstract.com/jsmatches/SerenaWilliamsCareer.js",
         timeout=15,
+        headers={
+            "User-Agent": "tennis-age-package/0.1 (STAT159 academic use)",
+        },
     )
 
 
