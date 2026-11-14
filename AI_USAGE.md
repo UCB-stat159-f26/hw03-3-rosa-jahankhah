@@ -8,16 +8,11 @@ This file describes how I used AI tools while working on STAT 159 HW3 (Python pa
 
 I used ChatGPT to understand the assignment, break the work into smaller steps, get ideas for functions and tests, and prepare documentation. ChatGPT helped me plan the overall package structure before I implemented things in Cursor.
 
-> Note: Please confirm the exact ChatGPT model label shown in your OpenAI interface if “GPT-6” needs to be updated for grading.
-
 ### Cursor AI Agent
 
 I used the Cursor AI Agent heavily during implementation. In this project, the agent helped write Python functions, create pytest tests, debug failing cases, check Serena Williams and Rafael Nadal results, update documentation, and create/push Git commits.
 
-Cursor model / version used in this workspace:
-
-- Product identity available in-session: **Cursor Auto / Composer agent**
-- Exact billed model name/version: **[FILL IN — I could not independently verify the exact Cursor model version string from this session]**
+Cursor model used in this workspace: Cursor AI Agent (Auto / Composer mode; exact underlying model not independently verified).
 
 ## How I Used AI
 
