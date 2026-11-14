@@ -131,3 +131,7 @@ I also learned more about writing tests and why they are important. Instead of t
 Another important part was using Git and making commits during the development process. I tried to separate my work into smaller steps and test each part before moving to the next one. I think this made it easier to understand my code and find problems.
 
 Overall, this assignment helped me understand the difference between writing code for one specific project and building a package that other people can install and use. I also got more comfortable organizing Python files, writing smaller functions, and connecting different parts of a project together.
+
+## AI Usage Disclosure
+
+This project used generative AI tools during development. Full details—including tools, how they were used, representative prompts, and verification steps—are in [AI_USAGE.md](AI_USAGE.md).
