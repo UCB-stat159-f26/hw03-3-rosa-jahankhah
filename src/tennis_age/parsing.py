@@ -61,3 +61,36 @@ def _female_match_row(row, player_birth_date):
         "age_difference": player_age - opponent_age,
         "result": row[4],
     }
+
+
+def _parse_opponent_age(value):
+    """Parse opponent age from a male match record."""
+    try:
+        age = float(value)
+    except (TypeError, ValueError) as error:
+        raise ValueError("Invalid opponent age.") from error
+    if age < 0:
+        raise ValueError("Invalid opponent age.")
+    return age
+
+
+def _male_match_row(row, player_birth_date):
+    """Clean a male player's individual match record."""
+    if len(row) < 17:
+        raise ValueError("Match record has missing fields.")
+
+    if not row[16] or row[4] not in ("W", "L"):
+        return None
+
+    match_date = row[0]
+    player_age = _age_at_match(player_birth_date, match_date)
+    opponent_age = _parse_opponent_age(row[16])
+
+    return {
+        "match_date": match_date,
+        "opponent": row[11],
+        "player_age": player_age,
+        "opponent_age": opponent_age,
+        "age_difference": player_age - opponent_age,
+        "result": row[4],
+    }
